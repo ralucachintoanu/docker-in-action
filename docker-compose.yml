@@ -1,0 +1,97 @@
+networks:
+  core_network:
+    name: core_network
+    driver: bridge
+
+services:
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - core_network      
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - core_network      
+
+  etl:
+    build: ./etl
+    image: etl-service
+    depends_on:
+      - mongodb
+    environment:
+      - PYTHONPATH=/app
+      - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+      - MONGO_DB_NAME=nyc_taxi
+      - MONGO_COLLECTION_NAME=trips
+    command: ["python", "etl.py"]
+    networks:
+      - core_network    
+
+  api:
+    build: ./api
+    depends_on:
+      - mongodb
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_APP=api/app.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - PYTHONPATH=/app
+      - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+      - MONGO_DB_NAME=nyc_taxi
+      - MONGO_COLLECTION_NAME=trips
+    networks:
+      - core_network       
+
+  airflow:
+    image: apache/airflow:2.6.0
+    depends_on:
+      - mongodb
+      - etl
+    ports:
+      - "8080:8080"   
+    environment:
+      # Airflow config
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor 
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+      # Credentials to be used in `airflow users create`
+      - AIRFLOW_USERNAME=${AIRFLOW_USERNAME}
+      - AIRFLOW_PASSWORD=${AIRFLOW_PASSWORD}
+      # Mongo config
+      - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+      - MONGO_DB_NAME=nyc_taxi
+      - MONGO_COLLECTION_NAME=trips        
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: >
+          /bin/bash -c "
+            pip install apache-airflow-providers-docker &&
+            airflow db init &&
+            airflow users create -u \$AIRFLOW_USERNAME -p \$AIRFLOW_PASSWORD -f My -l User -r Admin -e myuser@example.com &&
+            airflow standalone
+          "
+    networks:
+      - core_network          
+
+volumes:
+  mongodb_data:

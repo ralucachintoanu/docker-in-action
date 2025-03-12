@@ -1,0 +1,25 @@
+# Python virtual environment
+.venv/
+**/__pycache__/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+plugins/
+
+# Docker related
+docker-compose.override.yml
+.dockerignore
+*.pid
+volumes/
+secrets/
+*.sock
+
+# IDE and editor config files
+.vscode/
+
+# Ignore local environment settings
+.env
