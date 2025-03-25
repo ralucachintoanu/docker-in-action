@@ -19,18 +19,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 🔧 Prepare environment
+      - name: 🔧 Run just build
         run: |
           sudo apt-get update
           sudo apt-get install -y just
-          just venv
-
-      - name: 🎨 Check code formatting
-        run: |
-          source .venv/bin/activate
-          just check-format
-
-      - name: 🔍 Run linter
-        run: |
-          source .venv/bin/activate
-          just lint
+          just build
