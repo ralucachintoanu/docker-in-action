@@ -9,11 +9,13 @@ This project demonstrates how to build a local data pipeline using **Docker**. T
 ## 🚀 Technologies Used
 
 - **Docker & Docker Compose** (Containerization & Orchestration)
-- **Python (Flask, Swagger, Pandas)** (ETL & API Development)
-- **MongoDB** (Database)
+- **Python** (ETL and API development with Flask, Pandas, and Swagger)
+- **Poetry** (Dependency and environment management)
+- **MongoDB** (Database for storing processed trip data)
 - **Mongo Express** (Web UI for MongoDB)
-- **Apache Airflow** (Workflow Automation)
-- **Justfile** (Run commands easily)
+- **Apache Airflow** (Workflow orchestration for scheduling ETL jobs)
+- **Justfile** (Simplified command runner for local dev tasks and CI integration)
+- **GitHub Actions** (Continuous integration pipeline for testing, linting, and formatting)
 
 ## 📂 Project Structure
 
@@ -58,19 +60,25 @@ AIRFLOW_USRENAME=...
 AIRFLOW_PASSWORD=...
 ```
 
-### 2️⃣ Build and Start Containers
+### 2️⃣ Build the project (check format, run lint, tests, test coverage, ...)
+
+```sh
+just build
+```
+
+### 3️⃣ Start Containers
 
 ```sh
 just start-all
 ```
 
-### 3️⃣ Access Services
+### 4️⃣ Access Services
 
 - **Mongo Express UI**: [http://localhost:8081](http://localhost:8081)
 - **Flask API**: [http://localhost:5000](http://localhost:5000)
 - **Airflow UI**: [http://localhost:8080](http://localhost:8080)
 
-### 4️⃣ Stopping the Services
+### 5️⃣ Stop Services
 
 ```sh
 just stop-all
