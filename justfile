@@ -3,6 +3,10 @@ venv:
     python3.12 -m venv .venv
     . .venv/bin/activate && pip install black pylint
 
+# Check the format of all Python code using Black
+check-format:
+    black --check api etl airflow
+
 # Format all Python code using Black
 format:
     black airflow api etl
