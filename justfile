@@ -1,28 +1,24 @@
 # Recreate the root .venv and install tools
-venv:
-    python3.12 -m venv .venv
-    . .venv/bin/activate && pip install black pylint
+setup:
+    bash -c 'python3.12 -m venv .venv && source .venv/bin/activate && pip install poetry black pylint && cd api && poetry install && cd ../etl && poetry install'
 
 # Check the format of all Python code using Black
 check-format:
-    black --check api etl airflow
+    bash -c 'source .venv/bin/activate && black --check api etl airflow'
 
 # Format all Python code using Black
 format:
-    black airflow api etl
+    bash -c 'source .venv/bin/activate && black api etl airflow'
 
 # Lint all Python code using pylint
 lint:
-    pylint airflow api etl
+    bash -c 'source .venv/bin/activate && pylint api etl airflow'
 
 # Build the project
 build:
-    just venv
-    just check-format    
+    just setup
+    just check-format
     just lint
-    # just test
-    # just test-coverage
-    # just start-all
 
 
 # Starts all services
