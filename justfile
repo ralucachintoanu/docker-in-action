@@ -16,7 +16,11 @@ lint:
 
 # Tests for the api module
 test-api:
-    bash -c 'source .venv/bin/activate && cd api && poetry run pytest && poetry run pytest --cov=api --cov-report=term-missing'    
+    bash -c 'source .venv/bin/activate && cd api && poetry run pytest && poetry run pytest --cov=api --cov-report=term-missing'
+
+# Tests for the etl module
+test-etl:
+    bash -c 'source .venv/bin/activate && cd etl && poetry run pytest && poetry run pytest --cov=etl --cov-report=term-missing'     
 
 # Build the project
 build:
@@ -24,6 +28,7 @@ build:
     just check-format
     just lint
     just test-api
+    just test-etl
 
 
 # Starts all services

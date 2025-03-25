@@ -75,17 +75,22 @@ def _clean_data(df):
 def _load_data(
     df,
     processing_date,
-    mongo_uri=MONGO_URI,
-    db_name=MONGO_DB_NAME,
-    collection_name=MONGO_COLLECTION_NAME,
+    mongo_config=None,
+    collection=None,
 ):
     """
     Load data to MongoDB, replacing existing records for the specified date.
     """
-    print(f"Loading data to MongoDB uri {mongo_uri}...")
-    client = MongoClient(mongo_uri)
-    db = client[db_name]
-    collection = db[collection_name]
+    if not collection:
+        mongo_config = mongo_config or {
+            "uri": MONGO_URI,
+            "db": MONGO_DB_NAME,
+            "collection": MONGO_COLLECTION_NAME,
+        }
+        print(f"Loading data to MongoDB uri {mongo_config["uri"]}...")
+        client = MongoClient(mongo_config["uri"])
+        db = client[mongo_config["db"]]
+        collection = db[mongo_config["collection"]]
 
     # Drop existing records for the specified date
     processing_date = pd.to_datetime(processing_date)
@@ -103,7 +108,7 @@ def _load_data(
     collection.insert_many(records)
 
 
-def run_etl(processing_date):
+def run_etl(processing_date, collection=None):
     """
     Run the ETL process for the specified date.
     """
@@ -114,7 +119,7 @@ def run_etl(processing_date):
     else:
         print(f"Found {len(df)} records for {processing_date}")
         cleaned_df = _clean_data(df)
-        _load_data(cleaned_df, processing_date)
+        _load_data(cleaned_df, processing_date, collection=collection)
         print(f"ETL process completed for {processing_date}")
 
 
