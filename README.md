@@ -19,25 +19,30 @@ This project demonstrates how to build a local data pipeline using **Docker**. T
 
 ```
 docker-in-action/
-│-- etl/                  # ETL Service
-│   ├── etl.py            # Extracts, transforms, and loads data into MongoDB
-│   ├── Dockerfile        # Dockerfile for ETL service
-│   ├── dataset_sample.csv # Dataset
-│   ├── pyproject.toml    # Poetry config for etl module
+│
+│-- etl/                   # ETL Service
+│   ├── etl.py             # Extracts, transforms, and loads data into MongoDB
+│   ├── Dockerfile         # Dockerfile for ETL service
+│   ├── dataset_sample.csv # Dataset file
+│   ├── pyproject.toml     # Poetry config for etl module
 │   ├── poetry.lock
 │
-│-- api/                  # Flask API Service
-│   ├── app.py            # Serves processed data
-│   ├── Dockerfile        # Dockerfile for Flask API
-│   ├── pyproject.toml    # Poetry config for api module
+│-- api/                   # Flask API Service
+│   ├── app.py             # Serves processed data
+│   ├── Dockerfile         # Dockerfile for Flask API
+│   ├── pyproject.toml     # Poetry config for api module
 │   ├── poetry.lock
 │
-│-- airflow/              # Airflow for ETL Scheduling
-│   ├── dags/             # Airflow DAGs folder
+│-- airflow/               # Airflow for ETL Scheduling
+│   ├── dags/              # Airflow DAGs folder
 │
-│-- docker-compose.yml    # Orchestrates all services
-│-- justfile              # Defines a handy way to run multiple commands
-│-- README.md             # Project Documentation
+│-- .github/               # GitHub Actions CI workflows
+│   ├── workflows/         # Folder for GitHub Actions workflows
+│   │   └── build.yml      # CI pipeline for building, linting, and testing
+│
+│-- docker-compose.yml     # Orchestrates all services
+│-- justfile               # Defines a handy way to run multiple commands
+│-- README.md              # Project Documentation
 ```
 
 ## 🔧 Setup & Usage
