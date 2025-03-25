@@ -1,3 +1,26 @@
+# Recreate the root .venv and install tools
+venv:
+    python3.12 -m venv .venv
+    . .venv/bin/activate && pip install black pylint
+
+# Format all Python code using Black
+format:
+    black airflow api etl
+
+# Lint all Python code using pylint
+lint:
+    pylint airflow api etl
+
+# Build the project
+build:
+    just venv
+    just format    
+    just lint
+    # just test
+    # just test-coverage
+    # just start-all
+
+
 # Starts all services
 start-all:
     docker-compose up --build -d
