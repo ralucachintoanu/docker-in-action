@@ -1,3 +1,5 @@
+[![Build](https://github.com/ralucachintoanu/docker-in-action/actions/workflows/build.yml/badge.svg)](https://github.com/ralucachintoanu/docker-in-action/actions/workflows/build.yml)
+
 # Learning Docker: Local Data Pipeline with MongoDB
 
 ## 📌 Project Overview
