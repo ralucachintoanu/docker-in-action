@@ -26,7 +26,11 @@ jobs:
           just venv
 
       - name: 🎨 Check code formatting
-        run: just check-format
+        run: |
+          source .venv/bin/activate
+          just check-format
 
       - name: 🔍 Run linter
-        run: just lint
+        run: |
+          source .venv/bin/activate
+          just lint
