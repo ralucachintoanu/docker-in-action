@@ -21,12 +21,14 @@ docker-in-action/
 │   ├── etl.py            # Extracts, transforms, and loads data into MongoDB
 │   ├── Dockerfile        # Dockerfile for ETL service
 │   ├── dataset_sample.csv # Dataset
-│   ├── requirements.txt  # Requirements file for etl module
+│   ├── pyproject.toml    # Poetry config for etl module
+│   ├── poetry.lock
 │
 │-- api/                  # Flask API Service
 │   ├── app.py            # Serves processed data
 │   ├── Dockerfile        # Dockerfile for Flask API
-│   ├── requirements.txt  # Requirements file for api module
+│   ├── pyproject.toml    # Poetry config for api module
+│   ├── poetry.lock
 │
 │-- airflow/              # Airflow for ETL Scheduling
 │   ├── dags/             # Airflow DAGs folder

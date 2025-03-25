@@ -1,11 +1,13 @@
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 # Set the working directory
 WORKDIR /app
 
-# Copy requirements file and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+COPY pyproject.toml .
+RUN pip install poetry
+RUN poetry config virtualenvs.create false \
+ && poetry install --no-interaction --no-ansi
 
 # Copy script and dataset file into the container
 COPY etl.py .
