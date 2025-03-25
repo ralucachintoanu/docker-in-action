@@ -18,7 +18,7 @@ lint:
 # Build the project
 build:
     just venv
-    just format    
+    just check-format    
     just lint
     # just test
     # just test-coverage
