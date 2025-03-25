@@ -1,6 +1,6 @@
 # Recreate the root .venv and install tools
 setup:
-    bash -c 'python3.12 -m venv .venv && source .venv/bin/activate && pip install poetry black pylint && cd api && poetry install && cd ../etl && poetry install'
+    bash -c 'python3.12 -m venv .venv && source .venv/bin/activate && pip install poetry black pylint pytest pytest-cov && cd api && poetry install && cd ../etl && poetry install'
 
 # Check the format of all Python code using Black
 check-format:
@@ -14,11 +14,16 @@ format:
 lint:
     bash -c 'source .venv/bin/activate && pylint api etl airflow'
 
+# Tests for the api module
+test-api:
+    bash -c 'source .venv/bin/activate && cd api && poetry run pytest && poetry run pytest --cov=api --cov-report=term-missing'    
+
 # Build the project
 build:
     just setup
     just check-format
     just lint
+    just test-api
 
 
 # Starts all services

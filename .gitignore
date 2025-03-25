@@ -23,3 +23,7 @@ secrets/
 
 # Ignore local environment settings
 .env
+
+# Tests
+**/.coverage
+.DS_Store
